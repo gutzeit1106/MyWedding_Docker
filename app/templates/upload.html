@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+		<form method="post" action="/send" enctype="multipart/form-data">
+			<input type="file" id="img_file" name="img_file" class="col-sm-4">
+			<input type="submit" value="送信" class="btn">
+			</form>
+			{% if img_url %}
+			<p><img src="{{ img_url }}"></p>
+			{% endif %}
+    </div>
+  </div>
+</body>
+</html>

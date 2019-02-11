@@ -1,0 +1,23 @@
+#btn {
+    background: #ccc;
+    color: #333;
+    cursor: pointer;
+    padding: 10px 40px;
+    display: inline-block;
+    width: 100%
+}
+input {
+    background: none;
+    box-shadow: none;
+    border: none;
+    padding: 30px 30px;
+}
+
+＃delete_link{
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    width: 1em;
+    height: 1em;
+    font-size: 2em;
+}
