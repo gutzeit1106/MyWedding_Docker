@@ -3,12 +3,15 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from werkzeug import secure_filename
 import glob
 import datetime
+import subprocess
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'static/images/upload/'
+TMP_FOLDER = 'static/images/tmp/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif','jpeg','heic'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['TMP_FOLDER'] = TMP_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -45,7 +48,19 @@ def send():
         if img_file and allowed_file(img_file.filename):
             now = datetime.datetime.now()
             filename = 'g{0:%Y%m%d%H%M%S}_'.format(now) + secure_filename(img_file.filename)
-            img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            if  filename.rsplit('.', 1)[1].lower() != "heic".lower():
+                img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                #Convert from HEIC to JPG
+                heic_path = os.path.join(app.config['TMP_FOLDER'], filename)
+                filename = filename.rsplit('.', 1)[0]+'.jpg'
+                jpg_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                img_file.save(heic_path)
+                print(heic_path)
+                print(jpg_path)
+                subprocess.call( ["/usr/local/bin/tifig",heic_path, jpg_path] )
+
             img_url = '/uploads/' + filename
             img_list = sorted(glob.glob("./static/images/upload/*"))
             imgs = sorted(glob.glob("./static/images/upload/"))
